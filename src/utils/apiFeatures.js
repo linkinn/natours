@@ -11,7 +11,7 @@ class APIFeatures {
 
     // 1B) Advanced filtering
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+    queryStr = queryStr.replace(/\b(gte?|lte?)\b/g, match => `$${match}`);
 
     this.query = this.query.find(JSON.parse(queryStr));
 
@@ -31,8 +31,8 @@ class APIFeatures {
 
   limitFields() {
     if (this.queryString.fields) {
-      const fieldBy = this.queryString.fields.split(',').join(' ');
-      this.query = this.query.select(fieldBy);
+      const fields = this.queryString.fields.split(',').join(' ');
+      this.query = this.query.select(fields);
     } else {
       this.query = this.query.select('-__v');
     }

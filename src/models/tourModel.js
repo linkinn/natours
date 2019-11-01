@@ -17,11 +17,11 @@ const tourSchema = new mongoose.Schema(
     },
     slug: String,
     duration: {
-      type: String,
+      type: Number,
       required: [true, 'A tour must have a duration']
     },
     maxGroupSize: {
-      type: String,
+      type: Number,
       required: [true, 'A tour must have a group size']
     },
     difficulty: {
