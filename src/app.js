@@ -16,6 +16,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const viewRoutes = require('./routes/viewRoutes');
 
 app.set('view engine', 'pug');
 app.set('views', join(__dirname, 'views'));
@@ -63,10 +64,7 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.status(200).render('base');
-});
-
+app.use('/', viewRoutes);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRoutes);

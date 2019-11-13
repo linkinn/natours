@@ -32,14 +32,14 @@ const tourSchema = new mongoose.Schema(
         message: 'Difficulty is either: easy, medium and difficult'
       }
     },
-    rattingsAverage: {
+    ratingsAverage: {
       type: Number,
       default: 4.5,
       min: [1, 'Ratting must be above 1.0'],
       max: [5, 'Ratting must be below 5.0'],
       set: val => Math.round(val * 10) / 10
     },
-    rattingsQuantity: {
+    ratingsQuantity: {
       type: Number,
       default: 0
     },
@@ -166,7 +166,7 @@ tourSchema.pre(/^find/, function(next) {
 tourSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'guides',
-    select: 'name email'
+    select: 'name email role photo'
   });
 
   next();
