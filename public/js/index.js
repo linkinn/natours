@@ -2,10 +2,13 @@
 import '@babel/polyfill';
 import { login, logout } from './login';
 import { displayMap } from './mapbox';
+import { updateData } from './updateSettings'
 
 // DOM elemets
 const mapBox = document.getElementById('map')
-const loginForm = document.querySelector('.form')
+const loginForm = document.querySelector('.form--login')
+const updateLoginForm = document.querySelector('.form-user-data')
+const updatePasswordForm = document.querySelector('.form-user-password')
 const logOutBtn = document.querySelector('.nav__el--logout')
 
 //DELEGATION
@@ -22,5 +25,28 @@ if (loginForm) {
     login(email, password)
   })
 };
+
+if (updateLoginForm) {
+  updateLoginForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const name = document.getElementById('name').value
+    const email = document.getElementById('email').value
+    updateData({ name, email }, 'data')
+  })
+}
+
+if (updatePasswordForm) {
+  updatePasswordForm.addEventListener('submit', async e => {
+    e.preventDefault()
+    const oldPassword = document.getElementById('password-current').value
+    const password = document.getElementById('password').value
+    const passwordConfirm = document.getElementById('password-confirm').value
+    await updateData({ oldPassword, password, passwordConfirm }, 'password')
+
+    document.getElementById('password-current').value = ''
+    document.getElementById('password').value = ''
+    document.getElementById('password-confirm').value = ''
+  })
+}
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout)
