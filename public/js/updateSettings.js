@@ -15,7 +15,11 @@ export const updateData = async (data, type) => {
 
     if (res.data.status === 'success') {
       showAlert('success', 'Data update successfully!')
+      window.setTimeout(() => {
+        location.reload(true);
+      }, 1000);
     }
+
   } catch (err) {
     showAlert('error', err.response.data.message)
   }
