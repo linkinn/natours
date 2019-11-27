@@ -25,20 +25,37 @@ exports.uploadTourImages = upload.fields([
   { name: 'images', maxCount: 3 }
 ]);
 
-exports.resizeTourImages = (req, res, next) => {
-  console.log(req.files);
-  // if (!req.file) return next();
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  if (!req.files.imageCover || !req.files.images) return next();
 
-  // req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
 
-  // sharp(req.file.buffer)
-  //   .resize(500, 500)
-  //   .toFormat('jpeg')
-  //   .jpeg({ quality: 90 })
-  //   .toFile(`public/img/users/${req.file.filename}`);
+  await sharp(req.files.imageCover[0].buffer)
+    .resize(2000, 1333)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/tours/${req.body.imageCover}`);
+
+  req.body.images = [];
+
+  await Promise.all(
+    req.files.images.map(async (file, i) => {
+      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+
+      await sharp(file.buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${filename}`);
+
+      req.body.images.push(filename);
+    })
+  );
+
+  console.log(req.body.images);
 
   next();
-};
+});
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
